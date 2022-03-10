@@ -1,15 +1,18 @@
-# Appendix - Dynamic Gas Costs
+# 附录：动态Gas消耗
 
-### A0-0: Intrinsic Gas
-Intrinsic gas is the amount of gas paid prior to execution of a transaction.
-That is, the gas paid by the initiator of a transaction, which will always be an externally-owned account, before any state updates are made or any code is executed.
+注：在翻译时，gas用原单词，transaction简写为tx。
 
-Gas Calculation:
-- `gas_cost = 21000`: base cost
-- **If** `tx.to == null` (contract creation tx):
+### A0-0: 内在gas
+内在gas是tx执行前支付的gas。
+也就是说，这部分gas是在没有任何状态更新、没有运行任何代码的时候，由tx发起者（必然是一个EOA）支付的。
+
+Gas计算:
+- `gas_cost = 21000`：基础费用
+- **若** `tx.to == null` (创建合约的tx):
     - `gas_cost += 32000`
-- `gas_cost += 4 * bytes_zero`: gas added to base cost for every zero byte of memory data
-- `gas_cost += 16 * bytes_nonzero`: gas added to base cost for every nonzero byte of memory data
+- 使用内存时，每使用一个字节：
+- `gas_cost += 4 * bytes_zero`：若字节的值为0，需要添加的费用
+- `gas_cost += 16 * bytes_nonzero`：若字节的值不为0，需要添加的费用
 
 ### A0-1: Memory Expansion
 An additional gas cost is paid by any operation that expands the memory that is in use.
