@@ -14,13 +14,13 @@ Gas计算:
 - `gas_cost += 4 * bytes_zero`：若字节的值为0，需要添加的费用
 - `gas_cost += 16 * bytes_nonzero`：若字节的值不为0，需要添加的费用
 
-### A0-1: Memory Expansion
-An additional gas cost is paid by any operation that expands the memory that is in use.
-This memory expansion cost is dependent on the existing memory size and is `0` if the operation does not reference a memory address higher than the existing highest referenced memory address.
-A reference is any read, write, or other usage of memory (such as in a `CALL`).
+### A0-1: 内存扩充
+任何操作在扩充内存的使用时都需要支付额外费用。
+扩充的费用与当前内存使用量有关，而如果操作访问的地址低于当前最高地址，那么这个扩充费用就是`0`。
+这里的访问包括了读、写和其它要使用内存的操作（例如在`CALL`中）
 
-Terms:
-- `new_mem_size`: the highest referenced memory address after the operation in question (in bytes)
+符号:
+- `new_mem_size`：
 - `new_mem_size_words = (new_mem_size + 31) // 32`: number of (32-byte) words required for memory after the operation in question
 - <code><em>C<sub>mem</sub>(machine_state)</em></code>: the memory cost function for a given machine state
 
