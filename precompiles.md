@@ -1,12 +1,13 @@
-# EVM Precompiles
+# EVM 预编译合约
 
-References:
-These files are useful, but should use the actual geth repo tho
+本文内容参考自：
 
-- https://github.com/ethereum-optimism/optimism/blob/6d38f4731c449c3de1b0fc00d4ea18196073bd00/l2geth/params/protocol_params.go#L91
-- https://github.com/ethereum-optimism/optimism/blob/6d38f4731c449c3de1b0fc00d4ea18196073bd00/l2geth/core/vm/contracts.go#L357
+- https://github.com/ethereum-optimism/optimism/blob/develop/l2geth/params/protocol_params.go
+- https://github.com/ethereum-optimism/optimism/blob/develop/l2geth/core/vm/contracts.go
 
-All numbers are for Istanbul:
+虽然很方便，但是最好还是访问 geth 仓库。
+
+以下数额均为 Istanbul 版本：
 
 | Address | Name           |   Gas   | Notes |
 | :-----: | :------------- | :-----: | :---- |
@@ -20,4 +21,4 @@ All numbers are for Istanbul:
 |  0x08   | bn256Pairing   | Dynamic |       |
 |  0x09   | blake2F        | Dynamic |       |
 
-
+Berlin 版本似乎没有修改数值。
