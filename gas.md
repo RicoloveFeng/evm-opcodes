@@ -4,11 +4,11 @@
 
 ### A0-0: 内在gas
 内在gas是tx执行前支付的gas。
-也就是说，这部分gas是在没有任何状态更新、没有运行任何代码的时候，由tx发起者（必然是一个EOA）支付的。
+也就是说，这部分gas是在更新任何状态、运行任何代码之前，由tx发起者（必然是一个EOA）支付的。
 
 Gas计算:
 - `gas_cost = 21000`：基础费用
-- **若** `tx.to == null` (创建合约的tx):
+- **若** `tx.to == null` (这是一个创建合约的tx):
     - `gas_cost += 32000`
 - 使用内存时，每使用一个字节：
 - `gas_cost += 4 * bytes_zero`：若字节的值为0，需要添加的费用
@@ -33,23 +33,23 @@ Useful Notes:
 - Referencing a zero length range does not require memory to be extended to the beginning of the range.
 - The memory cost function is linear up to 724 bytes of memory used, at which point additional memory costs substantially more.
 
-### A0-2: Access Sets
-As of [EIP-2929](https://eips.ethereum.org/EIPS/eip-2929), two transaction-wide access sets are maintained.
-These access sets keep track of which addresses and storage slots have already been touched within the current transaction.
+### A0-2: 访问集
+根据 [EIP-2929](https://eips.ethereum.org/EIPS/eip-2929)，每次交易需要维护两个访问集。
+这些访问集会记录本次交易都访问了哪些地址和存储槽位。
 
 - `touched_addresses : Set[Address]`
-    - a set where every element is an address
-    - initialized to include `tx.origin`, `tx.to`\*, and all precompiles
-    - \* For a contract creation transaction, `touched_addresses` is initialized to include the address of the created contract instead of `tx.to`, which is the zero address.
+    - 这个集合的元素都是地址
+    - 初始化时添加 `tx.origin`, `tx.to`\*，以及所有预编译合约。
+    - \* 对于创建合约的tx，`touched_addresses` 不会添加 `tx.to`，而是添加合约创建到的地址。
 - `touched_storage_slots : Set[(Address, Bytes32)]`
-    - a set where every element is a tuple, `(address, storage_key)`
-    - initialized to the empty set, `{}`
+    - 这个集合的元素都是一个二元组 `(地址 address，存储键 storage_key)`
+    - 初始化为空集， `{}`
 
-The access sets above are relevant for the following operations:
-- `ADDRESS_TOUCHING_OPCODES := { EXTCODESIZE, EXTCODECOPY, EXTCODEHASH, BALANCE, CALL, CALLCODE, DELEGATECALL, STATICCALL, SELFDESTRUCT }`
-- `STORAGE_TOUCHING_OPCODES := { SLOAD, SSTORE }`
+访问集与以下 opcode 相关：
+- `地址访问操作 ADDRESS_TOUCHING_OPCODES := { EXTCODESIZE, EXTCODECOPY, EXTCODEHASH, BALANCE, CALL, CALLCODE, DELEGATECALL, STATICCALL, SELFDESTRUCT }`
+- `存储访问操作 STORAGE_TOUCHING_OPCODES := { SLOAD, SSTORE }`
 
-#### Updating the Access Sets
+#### 更新访问集
 
 When an address is the target of one of the `ADDRESS_TOUCHING_OPCODES`, the address is immediately added to the `touched_addresses` set.
 
