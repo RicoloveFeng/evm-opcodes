@@ -1,24 +1,24 @@
 # EVM Opcodes
-Opcode costs are drawn from the [Yellow Paper](https://ethereum.github.io/yellowpaper/paper.pdf), the [Jello Paper](https://jellopaper.org/evm/), and the [geth](https://github.com/ethereum/go-ethereum) implementation.
-This is intended to be an accessible reference, but it is informal and does not address opcode semantics.
-If you want to be certain of correctness and aware of every edge case, I would suggest using the Jello Paper or a client implementation.
-If you are looking for an informal reference with more information about opcode semantics, try [evm.codes](https://www.evm.codes/).
+Opcode 开销取自 [Yellow Paper](https://ethereum.github.io/yellowpaper/paper.pdf)，[Jello Paper](https://jellopaper.org/evm/) 以及 [geth](https://github.com/ethereum/go-ethereum) 实现。
+本仓库的目的是便捷参考，但是没有写得很正式，也没有追求详细解释 opcode 语义。
+如果你想进一步知道各种边界情况的正确性，请参考 Jello Paper 或者找个客户端实现。
+如果你想找侧重于语义方面的 opocde 参考，请访问 [evm.codes](https://www.evm.codes/) 或者 [ethervm.io](https://ethervm.io)。
 
-For operations with dynamic gas costs, see [gas.md](gas.md).
+对于动态开销的 opcode，请参考 [gas.md](gas.md)。
 
-### Notation
-* `a, b` => `a + b` indicates that the `ADD` opcode takes two items off the stack (`a` and `b`) and places the sum of these two values on the stack. The leftmost item (`a`) is the top of the stack.
-* All stack descriptions elide subsequent items that may be on the stack. It can be assumed that unspecified stack elements do not influence the semantics of an operation, except when a stack overflow would result.
-* The maximum stack size is 1024 items, and all stack items are 32 bytes.
-* `a // b` indicates flooring division. The result of division by 0 in the EVM is 0.
-* All arithmetic operations are modulo 2\*\*256.
-* Including the designated `INVALID` opcode, the EVM currently implements 141 opcodes, 65 of which are duplicates indicating the number of operands (`PUSHn`, `DUPn`, `SWAPn`, `LOGn`).
+### 记号
+* `a, b` => `a + b` 表示 `ADD` opcode 从栈中取两个操作数 (`a` 和 `b`) 然后把两者之和压入栈中。最左边的项 (`a`) 在栈的最顶层。
+* 所有更深层的栈项省略不表，因为这些项不会影响操作的语义，除非会出现栈溢出的情况。
+* 栈的最大容量为 1024，栈的每一项可容纳 32 字节
+* `a // b` 表示向下取整触发。 在 EVM 中除 0 的结果为 0。
+* 所有算术运算的结果都对 2\*\*256 取模。
+* 算上一个 `INVALID` opcode, EVM 现在总共实现了 141 个 opcode, 其中 65 个是同一字节码取不同数字的变种 (`PUSHn`, `DUPn`, `SWAPn`, `LOGn`)。
 
 #
 | Hex   | Name          | Gas   | Stack      | Mem / Storage | Notes |
 | :---: | :---          | :---: | :---       | :---          | :---  |
 |       |               |       | top, bottom|               |       |
-00      | STOP          | 0     |            |                      || halt execution
+00      | STOP          | 0     |                                   || halt execution
 01      | ADD           | 3     | `a, b` => `a + b`	                || (u)int256 addition modulo 2\*\*256
 02      | MUL           | 5     | `a, b` => `a * b`                 || (u)int256 multiplication modulo 2\*\*256
 03      | SUB           | 3     | `a, b` => `a - b`	                || (u)int256 addition modulo 2\*\*256
